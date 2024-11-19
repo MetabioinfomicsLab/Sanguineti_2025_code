@@ -161,12 +161,6 @@ class finite_difference:
             self.previous_medium=copy.deepcopy(self.medium) 
             self.mainFitTraj.append(testRew)
             result=[[ray.get(pair[0]),ray.get(pair[1])] for pair in res_ids]
-            if isinstance(testRew,float): 
-                every,outfold=checkpoint_every
-                if len(self.topr)>1: # if optimizing both for methane and acetate, terminate when reaching these conditions
-                    if self.topr[0]<0.004 and 0.005<self.vals[1]<0.007: self.checkpoint(outfold,gen); print(self.topr); break
-                else: # if optimizing only for acetate
-                    if self.topr[0]<0.003: self.checkpoint(outfold,gen); print(self.topr); break
             gradients=self._compute_gradients(result)
             self.adam_step(gradients)
             child_values=[x for y in result for x in y if x!=None]
@@ -178,7 +172,13 @@ class finite_difference:
                     self.checkpoint(outfold,gen)
                     if isinstance(testRew,float):
                         pass
-            print(f"Generation: {gen} time: {round(time.time()-now,4)} childMeanFit: {round(childRew,6)} mainFit: {round(testRew,6)} delta: {round(self.delta,6)} lrate: {round(self.lrate,6)} reg_scaled: {round(self.l2_decay*np.mean([self.medium[x]**2 for x in self.medium if x not in ['EX_cpd00013_m','EX_cpd00099_m','EX_cpd00971_m','EX_cpd00254_m','EX_cpd00063_m','EX_cpd00205_m','EX_cpd00009_m','EX_cpd10515_m','EX_cpd00034_m','EX_cpd00058_m','EX_cpd00030_m','EX_cpd11574_m','EX_cpd00149_m','EX_cpd00244_m','EX_cpd00048_m']]),6)} spec diffs: {[round(x,6) for x in self.topr]}")
+            print(f"Generation: {gen} time: {round(time.time()-now,4)} childMeanFit: {round(childRew,6)} mainFit: {round(testRew,6)} delta: {round(self.delta,6)} lrate: {round(self.lrate,6)}")
+            if isinstance(testRew,float): 
+                every,outfold=checkpoint_every
+                if len(self.topr)>1: # if optimizing both for methane and acetate, terminate when reaching these conditions
+                    if self.topr[0]<0.004 and 0.005<self.vals[1]<0.007: self.checkpoint(outfold,gen); print(self.topr); break
+                else: # if optimizing only for acetate
+                    if self.topr[0]<0.003: self.checkpoint(outfold,gen); print(self.topr); break
     def test(self):
         values=[]
         apply_medium=copy.deepcopy(self.medium)
