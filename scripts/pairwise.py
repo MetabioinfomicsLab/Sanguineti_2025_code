@@ -9,28 +9,28 @@ def chunks(l,nproc):
     nmore=len(l)%nproc
     return [l[i*(right_div+1):i*(right_div+1)+right_div+1] for i in range(nmore)]+[l[nmore*(right_div+1)+i*right_div:nmore*(right_div+1)+i*right_div+right_div] for i in range(nproc-nmore) if nmore<len(l)]
 
-def main(spps): # this function implements the 
+def main(spps): # this function implements the solutions to two-species models
     allres=[]
     for spp2 in spps:
         model=micom.load_pickle('models/'+spp2[0]+'.'+spp2[1]+".pickle")
         tog1,tog2,alone1,alone2=0,0,0,0
-        times=1000 # number of iterations per pair of models
+        times=10000 # number of iterations per pair of models
         for u in range(times):
             model.medium={x.id:np.random.random() for x in model.exchanges}
-            with model:
+            with model: # maximize species 1 growing with the other
                 model.reactions.get_by_id('bio1__'+spp2[1]).bounds=(0,0) # this enforces the maximization of only one species' growth
                 model.optimize()
                 tog1+=model.reactions.get_by_id('bio1__'+spp2[0]).flux
-            with model:
+            with model: # maximize species 2 growing with the other
                 model.reactions.get_by_id('bio1__'+spp2[0]).bounds=(0,0)
                 model.optimize()
                 tog2+=model.reactions.get_by_id('bio1__'+spp2[1]).flux
-            with model:
+            with model: # maximize species 1 growing alone
                 for r in model.reactions:
                     if r.id.startswith('EX_') and r.id.endswith(spp2[1]): r.bounds=(0,0) # shut down all exchanges from the other species
                 model.optimize()
                 alone1+=model.reactions.get_by_id('bio1__'+spp2[0]).flux
-            with model:
+            with model: # maximize species  growing alone
                 for r in model.reactions:
                     if r.id.startswith('EX_') and r.id.endswith(spp2[0]): r.bounds=(0,0)
                 model.optimize()
