@@ -1,2 +1,25 @@
 # cronusPaper
+This repository contains scripts and data associated to the work described in **title**, Sanguineti et al, **year**.  
+The whole content of the repository is mentioned below, where each section describes a specific procedure applied in the present study, addressing the corresponding scripts and data. 
 ## Modified cooperative tradeoff strategy
+In the original strategy (https://doi.org/10.1128/mSystems.00606-19), implemented in the Micom Python package (https://github.com/micom-dev/micom), the community growth rate CG is defined as a weighted sum of individual species’ growth rates. In Python code, this can be written as:
+```
+CG = sum( rel_abundances[i] * growth_rates[i] for i in range(num_species) )
+# where rel_abundances and growth_rates are sequences listing all species relative abundances and growth rates, respectively
+```
+The first step of the strategy consists in finding the maximum community growth rate. A second optimization step is then performed, where community growth rate is allowed to take values down to a certain fraction alpha of its maximum and the squared sum of the growth rates is minimized:
+```
+sum( growth_rates[i]**2 for i in range(num_species) ) # find growth rates minimizing this function
+```
+The fraction alpha can be defined by the user to meet specific criteria.  
+This minimization has the effect of distributing community growth among members. As shown by the developers of Micom, this minimization ends up to result in growth rates that are linearly and positively dependent on the species’ relative abundances, unless constraints not allowing this relationship are set. This effect works fine in systems like the human gut, the main target of the cooperative tradeoff strategy, where actual growth rates tend to be positively related to relative abundances (taken as a proxy for absolute abundance). However, it may not work well in other systems (e.g. a trickle bed reactor) displaying a different relative abundance - growth rates relationship. In order to be able to impose a different relationship, we introduced the relative abundance and a weighting parameter beta in the objective function to minimize:
+```
+sum( ( rel_abundances[i]**beta * growth_rates[i] )**2 for i in range(num_species) ) # find growth rates minimizing this function
+```
+The parameter beta can be defined by the user to meet specific criteria.  
+When beta equals zero, the function to minimize corresponds to the one of the original cooperative tradeoff strategy, that is, the optimization strategy forces a linear positive relationship between growth rates and relative abundances. When beta equals one, inverse proportionality between growth rates and relative abundances is forced. Moreover, empirical analysis suggests that, when beta equals 0.5, equality of growth rates seems to be forced, although the actual effect is dependent on the value of α. These tendencies are met when the problem’s constraints allow them, and when the α parameter is sufficiently low.  
+
+In this repository, the scripts implementing this modified version of the cooperative tradeoff strategy are scripts/community.py and scripts/problems.py. These scripts were copy-pasted from the Micom package, and the modification was implemented by modifying lines 753, 802 of scripts/community.py and lines 27, 63, 69, 88 of scipts/problems.py.  
+Replacing the corresponding files of Micom with these two files allows to run the modified cooperative tradeoff strategy (as well as original one if beta is set to zero) within the Micom framework.  
+
+Given the problem of multiple solutions and the dependance of the obtained solution on the solver status, to exactly reproduce the results presented in the article using the models in models/ and the media in media/, the script scripts/solve_models.py should be used.
