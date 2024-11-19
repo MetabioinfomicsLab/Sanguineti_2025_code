@@ -1,4 +1,4 @@
-# cronusPaper
+# Content
 This repository contains scripts and data associated to the work described in **title**, Sanguineti et al, **year**.  
 The whole content of the repository is mentioned below, where each section describes a specific procedure applied in the present study, addressing the corresponding scripts and data. 
 ## Modified cooperative tradeoff strategy
@@ -23,3 +23,5 @@ In this repository, the scripts implementing this modified version of the cooper
 Replacing the corresponding files of Micom with these two files allows to run the modified cooperative tradeoff strategy (as well as the original one if beta is set to zero) within the Micom framework.  
 
 Given the problem of multiple solutions and the dependance of the obtained solution on the solver status, to exactly reproduce the results presented in the article using the models in models/ and the media in media/, the script scripts/solve_models.py should be used.
+## Pairwise modelling
+In the study, pairwise metabolic modelling was used to infer the relative interaction strength of all pairs of species among {'Saccharicenans_sp_', 'Pseudothermotoga_B_sp_', 'Methanothermobacter_marburgensis_1', 'Methanothermobacter_thermautotrophicus_'}. Two-species community models were built with Micom, and are available in models/ .  The script implementing the approach to solve such pairwise models is implemented in scripts/pairwise.py .
