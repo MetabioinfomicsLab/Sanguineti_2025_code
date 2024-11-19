@@ -22,7 +22,7 @@ When beta equals zero, the function to minimize corresponds to the one of the or
 In this repository, the scripts implementing this modified version of the cooperative tradeoff strategy are scripts/community.py and scripts/problems.py. These scripts were copy-pasted from the Micom package, and the modification was implemented by modifying lines 753, 802 of scripts/community.py and lines 27, 63, 69, 88 of scipts/problems.py.  
 Replacing the corresponding files of Micom with these two files allows to run the modified cooperative tradeoff strategy (as well as the original one if beta is set to zero) within the Micom framework.  
 
-Given the problem of multiple solutions and the dependance of the obtained solution on the solver status, to exactly reproduce the results presented in the article using the models in models/ and the media in media/, the script scripts/solve_models.py should be used.
+Given the problem of multiple solutions and the dependance of the obtained solution on the solver status, to exactly reproduce the results presented in the article using the models in models/ and the media in media/, the script scripts/solve_models.py should be used, and IBM ILOG CPLEX Optimization Studio 22.1.1 as solver.
 ## Pairwise modelling
 In the study, pairwise metabolic modelling was used to infer the relative interaction strength of all pairs of species among {'Saccharicenans_sp_', 'Pseudothermotoga_B_sp_', 'Methanothermobacter_marburgensis_1', 'Methanothermobacter_thermautotrophicus_'}. Two-species community models were built with Micom, and are available in models/ .  The script implementing the approach to solve such pairwise models is implemented in scripts/pairwise.py .
 ## Simulating bioaugmentation
