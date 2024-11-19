@@ -177,7 +177,7 @@ class finite_difference:
                 every,outfold=checkpoint_every
                 if len(self.topr)>1: # if optimizing both for methane and acetate, terminate when reaching these conditions
                     if self.topr[0]<0.004 and 0.005<self.vals[1]<0.007: self.checkpoint(outfold,gen); print(self.topr); break
-                else: # if optimizing only for acetate
+                else: # if optimizing only for methane
                     if self.topr[0]<0.003: self.checkpoint(outfold,gen); print(self.topr); break
     def test(self):
         values=[]
