@@ -1,5 +1,5 @@
 # Content
-This repository contains scripts and data associated to the work described in **title**, Sanguineti et al, **year**.  
+This repository contains scripts and data associated to the work described in Systems-level modelling of methanogen-homoacetogen interactions in carbon dioxide methanation, Sanguineti et al, 2025.  
 The whole content of the repository is mentioned below, where each section describes a specific procedure applied in the present study, addressing the corresponding scripts and data. 
 ## Modified cooperative tradeoff strategy
 In the original strategy (https://doi.org/10.1128/mSystems.00606-19), implemented in the Micom Python package (https://github.com/micom-dev/micom), the community growth rate CG is defined as a weighted sum of individual species’ growth rates. In Python code, this can be written as:
