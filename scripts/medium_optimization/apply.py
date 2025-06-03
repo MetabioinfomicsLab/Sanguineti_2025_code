@@ -37,16 +37,16 @@ rids=['EX_cpd00013_m', 'EX_cpd00099_m', 'EX_cpd00971_m', 'EX_cpd00254_m', 'EX_cp
 
 target=targets[i]
 model=models[i]
-startingsigma=0.05
-medinit=torch.rand(len(rids))*startingsigma
+startingsigma=0.05 # initial values are sampled from uniform ditribution in [-0,05,0.05]
+medinit=torch.rand(len(rids))*startingsigma # sample initial values
 
 ags=[agent.multiobj_medopt_agent(rids,target,model,MAE,alpha,beta,medinit)] 
 
 outfold='output_folder' # store media, loss curve
-nproc=100
-numchild=nproc
-eplen=1
-env=agent.fake_env(ags)
+nproc=100 # number of independent threads for parallelization
+numchild=nproc # number of perturbated parameters for each iteration
+eplen=1 # length of the episode, here clearly only 1 (needed for compatibility)
+env=agent.fake_env(ags) # "environment" that generate reward (loss) (needed for compatibility)
 trainer=nes.multiobjective_wrapper(env, # "environment" that generate reward (loss) (needed for compatibility)
                                    nproc, # number of threads for parallelization
                                    numchild, # number of perturbated parameters for each iteration
